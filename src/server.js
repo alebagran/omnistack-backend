@@ -10,7 +10,11 @@ app.use( cors() );
 const server = require( 'http' ).Server( app );
 const io = require( 'socket.io' )( server );
 
-io.origins('*');
+io.origins( ( origin, callback ) => {
+    if ( origin !== 'http://localhost:3000' ) {
+      return callback( 'origin not allowed', false );}
+  callback( null, true );
+} );
 
 io.on( 'connection', socket => {
     socket.on( 'connectRoom', box => {
